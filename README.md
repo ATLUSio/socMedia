@@ -14,4 +14,7 @@ Running Twitter Search:
 - cd into the directory ~/socMedia/twitter/
 - run 'ruby tweetSearch.rb' and follow instructions
 
-Reddit Search coming soon..
+Running Reddit Search:
+- open terminal
+- cd into the directory ~/socMedia/reddit/
+- run 'ruby redditSearch.rb' and follow instructions
