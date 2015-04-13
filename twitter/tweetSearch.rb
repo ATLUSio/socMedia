@@ -117,7 +117,7 @@ scheduleSearch.every speed, :first => :now do
   client.search(searchTerm).take(1).each do |tweet|
   	#if the latest tweet is not equal to 
   	if tweet != latestTweetID
-  		print "New tweet: \n"
+  		print "New tweet at #{n}: \n"
   		latestTweetID = tweet #set latestTweetID to the current tweet, since the current tweet is the most recent
   		puts tweet.text
   		puts tweet.uri
