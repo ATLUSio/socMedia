@@ -5,10 +5,10 @@ require 'rufus-scheduler' #cronjob gem
 #Configure the client. Done through apps.twitter.com
 
 client = Twitter::REST::Client.new do |config|
-	config.consumer_key = "copy_and_paste_key_here"
-	config.consumer_secret = "copy_and_paste_key_here"
-	config.access_token = "copy_and_paste_key_here"
-	config.access_token_secret = "copy_and_paste_key_here"
+	config.consumer_key = "keys_here"
+	config.consumer_secret = "keys_here"
+	config.access_token = "keys_here"
+	config.access_token_secret = "keys_here"
 end
 
 #Configure the rescheduler

@@ -59,7 +59,7 @@ client.search(searchTerm, options={sort: 'new'}).take(amountOfLatestThreads).eac
  end
 
 timeWhenLatestThread = Time.now;
-print "The #{amountOfLatestThreads} latest tweets as of #{timeWhenLatestThread}: \n"
+print "The #{amountOfLatestThreads} latest threads as of #{timeWhenLatestThread}: \n"
 print "Checking for new threads for the '#{searchTerm}' keyword every #{speed} seconds. Will update when one arrives. \n"
 
  scheduleSearch.every speed, :first => :now do
@@ -72,7 +72,7 @@ print "Checking for new threads for the '#{searchTerm}' keyword every #{speed} s
 			puts "Thread title: " + result.title + "\n"
 			puts "Thread link: " + result.permalink + "\n"
 			puts "\n"
-			print "The #{amountOfLatestThreads} latest tweets as of #{timeWhenLatestThread}: \n"
+			print "The #{amountOfLatestThreads} latest threads as of #{timeWhenLatestThread}: \n"
 			print "Checking for new threads for '#{searchTerm}' every #{speed} seconds. Will update when one arrives. \n"
 			puts "\n"
 		end
