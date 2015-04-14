@@ -9,7 +9,7 @@ Social Media Tools Using Ruby
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-Each search tool requires a little bit of authentication information to use.
+Authentication
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
