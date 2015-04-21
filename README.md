@@ -21,6 +21,9 @@ Twitter:
 Reddit:
 - Add your username and password at the top of redditSearch.rb
 
+Slack:
+- Create webhook on: https://api.slack.com/applications/new
+- Add the webhook to the 'slacker' instantiation
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
