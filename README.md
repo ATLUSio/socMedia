@@ -36,6 +36,7 @@ Slack:
 - run 'sudo gem install redditkit' (enter password)
 - run 'sudo gem install rufus-scheduler' (enter password)
 - run 'sudo gem install slack-notifier' (enter password) < If you want Slack notifications
+- run 'sudo gem install similar_text' (enter password)
 
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
