@@ -1,39 +1,24 @@
-##Required Gems below.
-##Comment out any gems that are not needed.
-##Note: Slack notifications automatically commented out.
-
-##Require Twitter Gem for Twitter API handling
 require 'twitter'
-
-##require 'similar_text' gem for checking the similarity of a new tweet
 require 'similar_text'
 
-##Configure the client. Done through apps.twitter.com.
-##Add an app to your account, and you should be provided with the creds below
 client = Twitter::REST::Client.new do |config|
 	config.consumer_key = "key"
 	config.consumer_secret = "secret"
 	config.access_token = "#######-token"
 	config.access_token_secret = "token_secret"
 end
-
-##Require and configure Rufus's scheduler gem, for cronjob handling
-require 'rufus-scheduler'
-scheduleSearch = Rufus::Scheduler.new
-
-##Require the slack notifier gem, for easy push notifications to Slack
+#Easy push notifications to Slack
 ##Link to create webhook: https://api.slack.com/applications/new
-require 'slack-notifier'
-slacker = Slack::Notifier.new "webhook_here"
+#require 'slack-notifier'
+#slacker = Slack::Notifier.new "webhook_here"
 
 ##Gets the type of repeated time, whether seconds, minutes, hours, or days.
-##Anything higher than days is not coded for
-def getType() 
+def getType()
 	print "What type of time: \n 1 - Seconds \n 2 - Minutes \n 3 - Hours \n 4 - Days \n"
 	type = gets.chomp
 end
 
-##Determines how many tweets we want to initially pull. 
+##Determines how many tweets we want to initially pull.
 def getTweetQuantity()
 	print "How many tweets would you like to limit your search to (5 recommended): "
 	return $stdin.gets.chomp.to_i
@@ -46,7 +31,7 @@ def getReoccurence(type)
 		print "How many seconds to repeat job? \n"
 		##Twitter's rate limiter is 180 searches every 15 minutes, or 1 search every
 		##5 seconds. e.g. If you have two searches running side by side, you can only
-		##perform 1 search every 10 seconds. 
+		##perform 1 search every 10 seconds.
 		print "Recommended >30, otherwise you will hit Twitter's rate limiter: "
 			defaultSeconds = 30
 			secondsChosen = $stdin.gets.chomp.to_i
@@ -72,10 +57,9 @@ def getReoccurence(type)
 		puts "Either input was misspelled or the code doesn't support that time frame."
 		puts "Setting time to 60 seconds."
 		return 60
-	end 
+	end
 end
 
-##Gets the term to search for. 
 def getSearchTerms()
 	print "What would you like to search on Twitter? \n"
 	print "Search to someone: 'to:atlusio' \n"
@@ -84,24 +68,19 @@ def getSearchTerms()
 	print "Include '-rt' for no retweets: 'TaylorSwift -rt' \n"
 	print "Search: "
 	s = $stdin.gets.chomp
-	return s 
+	return s
 end
 
 ##Ask how many tweets we will want
-quantity = getTweetQuantity() 
-
+quantity = getTweetQuantity()
 ##Ask what type of time, converts to seconds
-type = getType() 
-
+type = getType()
 ##Ask how often, the type of time. Use 'type' from above as the input
-speed = getReoccurence(type) 
-
+speed = getReoccurence(type)
 ##Ask for what terms we want to search for
 searchTerm = getSearchTerms()
-
 ##create a blacklist for twitter users we wish to filter out. useful for bots
 blacklist = []
-
 ##create an array to add tweets to, so we do not get identical tweets.
 arrayCompare = []
 
@@ -165,9 +144,9 @@ print "Checking for new tweets '#{searchTerm}' every #{speed} seconds. Will upda
 totalBlocked = 0
 totalPosted = 0
 totalTweets = 0
-#newTweet = "Payments Processor Confirms Growing Interest in Bitcoin: Bitcoin payments processing company BitPay recently confirmed that there is a grow…"
+
 #Set a schedule to update only if latestTweetID is not equal to the latest tweet
-scheduleSearch.every speed, :first => :now do
+while 1
   	n = Time.now; #set n to current time
   	client.search(searchTerm).take(quantity).each do |tweet|
   		##if the latest tweet is not equal to latestTweetID and if the user's screen_name is on the
@@ -176,7 +155,7 @@ scheduleSearch.every speed, :first => :now do
   		tweetUser = tweet.user.screen_name #user's screen name for blacklist comparison
   		varFindMatch = findMatch(arrayCompare, tweetCompare) #find if there are any matches
   		varBlacklist = tweetBlacklist(blacklist, tweetUser) #find if any users are blacklisted
-  			
+
   		totalTweets += 1
   		#if it passes the two checks, post the tweet
 		if varFindMatch == false and varBlacklist == false
@@ -189,7 +168,7 @@ scheduleSearch.every speed, :first => :now do
   			puts tweet.uri #shows the URL of the tweet
   			print "Total posted: #{totalPosted} \n" #lets us know how many tweets were posted
   			print "Block ratio: " + ((totalBlocked.fdiv(totalPosted+totalBlocked))*100).to_s + "%\n" #let us know what % were blocked
- 	 		print "Checking for new tweets '#{searchTerm}' every #{speed} seconds. Will update when a new one arrives.\n" 
+ 	 		print "Checking for new tweets '#{searchTerm}' every #{speed} seconds. Will update when a new one arrives.\n"
   		#if it fails the above test, check to see which of the bottom two it failed on
   		#run blacklist first, since we want to omit all those we do not want to see first. if it's not false, it has to be true.
   		elsif varBlacklist == true
@@ -205,6 +184,5 @@ scheduleSearch.every speed, :first => :now do
   			print "Total Blocked: " + ((totalBlocked.fdiv(totalTweets))*100).to_s + "%\n" #block %
   		end
   	end
+		sleep(speed)
 end
-
-scheduleSearch.join

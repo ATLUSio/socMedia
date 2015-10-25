@@ -1,10 +1,7 @@
 require 'redditkit'
-require 'rufus-scheduler'
 
 #Create the reddit client and the scheduler
 client = RedditKit::Client.new 'reddit_username', 'reddit_password'
-
-scheduleSearch = Rufus::Scheduler.new
 
 #Reddit rate limiter at 0.5 requests/second. (1 per 2 seconds)
 def getReoccurence()
@@ -12,7 +9,7 @@ def getReoccurence()
 	print "In seconds: "
 	s = $stdin.gets.chomp.to_i
 	if s < 5
-		#set minimum to 5 seconds, to cleanly avoid the rate limiter. 
+		#set minimum to 5 seconds, to cleanly avoid the rate limiter.
 		#speculated that it's done by IP, so higher the better when
 		#sharing internet
 		return 5
@@ -27,7 +24,7 @@ def getSearchTerms()
 	print "Search for any recent keywords: 'Huskies' \n"
 	print "Search: "
 	s = $stdin.gets.chomp
-	return s 
+	return s
 end
 
 
@@ -46,7 +43,6 @@ latestThreadID = getLatestThreadID(client, searchTerm)
 
 #clear the terminal to make it look clean
 system("clear")
-
 #set the amount of latest threads to pull, before querying every # of seconds
 amountOfLatestThreads = 5
 
@@ -62,7 +58,7 @@ timeWhenLatestThread = Time.now;
 print "The #{amountOfLatestThreads} latest threads as of #{timeWhenLatestThread}: \n"
 print "Checking for new threads for the '#{searchTerm}' keyword every #{speed} seconds. Will update when one arrives. \n"
 
- scheduleSearch.every speed, :first => :now do
+ while 1
 	n = Time.now
 	client.search(searchTerm, options={sort: 'new'}).take(1).each do |result|
 		if result != latestThreadID
@@ -77,5 +73,5 @@ print "Checking for new threads for the '#{searchTerm}' keyword every #{speed} s
 			puts "\n"
 		end
 	end
+	sleep(speed)
 end
-scheduleSearch.join
